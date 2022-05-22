@@ -32,14 +32,23 @@ export const GPMap = () => {
   };
 
   useEffectAsync(async () => {
-    const currPos = await getCurrentPosition();
-    console.debug(`lat: ${currPos.coords.latitude}`);
-    console.debug(`lng: ${currPos.coords.longitude}`);
-
     try {
-      setSearchLocation({ lat: currPos.coords.latitude, lng: currPos.coords.longitude });
-    } catch (err) {
-      console.error(`Could not find current location: ${err}`);
+      const currPos = await getCurrentPosition();
+
+      try {
+        console.debug(`lat: ${currPos.coords.latitude}`);
+        console.debug(`lng: ${currPos.coords.longitude}`);
+        setSearchLocation({ lat: currPos.coords.latitude, lng: currPos.coords.longitude });
+      } catch (err: any) {
+        console.error(`Used the default location. Error occured when setting the current location: ${err}`);
+        setSearchLocation(defaultLocation);
+      }
+    } catch (err: any) {
+      if (err instanceof GeolocationPositionError) {
+        console.error(`Used the default location. Could not find current location: ERROR(${err.code}): ${err.message}`);
+      } else {
+        console.error(`Used the default location. Could not find current location: ERROR(${err})`);
+      }
       setSearchLocation(defaultLocation);
     }
   }, []);
@@ -55,10 +64,7 @@ export const GPMap = () => {
   // toggle selected state
   const selectGP = (name: string) => {
     setGps(
-      gps.map((gp: any) => gp.selected = false)
-    );
-    setGps(
-      gps.map((gp: any) => gp.name === name ? { ...gp, selected: !gp.selected } : gp)
+      gps.map((gp: any) => gp.name === name ? { ...gp, selected: !gp.selected } : { ...gp, selected: false })
     );
     // console.debug(JSON.stringify(gps));
   };

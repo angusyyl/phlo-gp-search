@@ -71,7 +71,7 @@ export const GPMap = () => {
 
   return (
     <>
-      {gps && (
+      {gps ? (
         <>
           <GoogleMapReact
             bootstrapURLKeys={{ key: "AIzaSyC2CmhUmpXIxkcQubwX42E1GqlJ_YgcjtU" }}
@@ -90,11 +90,9 @@ export const GPMap = () => {
               ></GPMapIcon>
             ))}
           </GoogleMapReact>
-          {gps.map((gp: any) => (
-            <Doctor key={gp.name} doctor={gp} onClick={() => selectGP(gp.name)}>{gp.name}</Doctor>
-          ))}
+          <Doctors gps={gps} selectGP={selectGP}></Doctors>
         </>
-      )}
+      ): 'Please wait. The map is being loaded...'}
     </>
   );
 };
@@ -110,9 +108,19 @@ const GPMapIcon = ({ gp, onClick }: any) => {
   );
 };
 
-const Doctor = ({ doctor, onClick }: any) => {
+const Doctors = ({ gps, selectGP }: any) => {
   return (
-    <div className={doctor.selected ? styles.doctorContainerHighlight : ''} onClick={onClick}>
+    <div className={styles.doctorsContainer}>
+      {gps.map((gp: any) => (
+        <Doctor key={gp.name} doctor={gp} selectGP={() => selectGP(gp.name)}>{gp.name}</Doctor>
+      ))}
+    </div>
+  );
+}
+
+const Doctor = ({ doctor, selectGP }: any) => {
+  return (
+    <div className={doctor.selected ? styles.doctorContainerHighlight : ''} onClick={selectGP}>
       <div>Name: {doctor.name}</div>
       <div>Address: {doctor.address}</div>
     </div>

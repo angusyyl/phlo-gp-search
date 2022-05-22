@@ -39,6 +39,7 @@ d. add a distance filter
 2. If you built this app from scratch, what tools would you use, and why?
 For the frontend, I would go for Angular or React because both are robust for web & mobile app development.
 For the backend, Koa is definitely a good choice because the same Javascript can be used. But I would also consider FastAPI with Python based as it sounds to have high performance and fast to code and easy to learn. It also provides automatic documentation, autocompletion, data validation, security and many more.
+Or cloud-based Firebase.
 
 3. What technology are you most excited about right now?
 A.I.
